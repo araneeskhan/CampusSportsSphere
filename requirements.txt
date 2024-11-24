@@ -1,0 +1,8 @@
+flask
+flask-cors
+sentence-transformers
+torch
+httpx
+beautifulsoup4
+nltk
+requests
