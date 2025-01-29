@@ -1,0 +1,196 @@
+:root {
+  --primary-color: #235264;
+  --secondary-color: #1a3c4d;
+  --accent-color: #00ffff;
+  --text-color: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  margin-left: 500px;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(163, 161, 161, 0.493);
+  color: var(--text-color);
+}
+
+.title {
+  font-size: 2.5rem;
+  color: var(--accent-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.selectWrapper {
+  position: relative;
+  width: 48%;
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background-color: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.3s ease;
+}
+
+
+.select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.selectWrapper::after {
+  content: "\25BC";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--accent-color);
+}
+
+.manageItemsTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: hidden; 
+}
+
+.tableHead {
+  background-color: var(--glass-bg);
+}
+
+.tableHeadCell {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tableCell {
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.tableCell input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 5px;
+}
+
+.actionButton {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: var(--primary-color);
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  background-color: #00ccff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.generateButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  background-color: transparent;
+  border: 2px solid var(--accent-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.generateButton:hover {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.generateButton svg {
+  margin-right: 0.5rem;
+}
+
+.exportOptions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.exportButton {
+  width: 48%;
+  padding: 1rem;
+  font-size: 1rem;
+  color: var(--primary-color);
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.exportButton:hover {
+  background-color: #00ccff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .selectWrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .exportOptions {
+    flex-direction: column;
+  }
+
+  .exportButton {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}

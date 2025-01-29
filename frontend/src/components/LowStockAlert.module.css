@@ -1,0 +1,178 @@
+:root {
+  --primary-color: #235264;
+  --secondary-color: #1a3c4d;
+  --accent-color: #00ffff;
+  --text-color: #ffffff;
+  --danger-color: #ff4757;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  margin-left: 500px;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(158, 157, 157, 0.418);
+  color: var(--text-color);
+}
+
+.title {
+  font-size: 2.5rem;
+  color: var(--accent-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.titleIcon {
+  margin-right: 1rem;
+  font-size: 2.5rem;
+  color: var(--danger-color);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.summary {
+  background-color: var(--glass-bg);
+  /* backdrop-filter: blur(10px); */
+  border-radius: 10px;
+  padding: 1rem;
+  color: var(--text-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.summary p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.refreshButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: var(--primary-color);
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.refreshButton:hover {
+  background-color: #00ccff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.refreshButton svg {
+  margin-right: 0.5rem;
+}
+
+.loading, .noItems {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid var(--accent-color);
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.tableWrapper {
+  overflow-x: hidden;
+}
+
+.manageItemsTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  margin-top: 1rem;
+}
+
+.tableHead {
+  background-color: var(--glass-bg);
+}
+
+.tableHeadCell {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tableRow {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.tableRow:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.01);
+}
+
+.tableCell {
+  padding: 1rem;
+  text-align: left;
+}
+
+.quantity {
+  font-weight: bold;
+  color: var(--danger-color);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary {
+    margin-bottom: 1rem;
+  }
+
+  .refreshButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tableHeadCell, .tableCell {
+    padding: 0.75rem 0.5rem;
+  }
+}

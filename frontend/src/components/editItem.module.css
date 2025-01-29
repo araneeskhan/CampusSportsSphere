@@ -1,0 +1,147 @@
+:root {
+    --primary-color: #235264;
+    --secondary-color: #1a3c4d;
+    --accent-color: #00ffff;
+    --text-color: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(255, 255, 255, 0.2);
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    margin-top: 100px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgb(124, 121, 121);
+    color: var(--text-color);
+}
+
+.formTitle {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.editItemForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.inputBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.formLabel {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.formInput {
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.imageUploadBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.imageUploadLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.imageUploadLabel:hover {
+    background-color: #00ccff;
+}
+
+.imageIcon {
+    font-size: 1.5rem;
+}
+
+.imageInput {
+    display: none;
+}
+
+.selectedImageName {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+}
+
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.submitButton:hover {
+    background-color: #00ccff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.submitButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.uploadIcon {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    .formTitle {
+        font-size: 2rem;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #235264;
+  --secondary-color: #1a3c4d;
+  --accent-color-1: #00ffff;
+  --accent-color-2: #ff00ff;
+  --accent-color-3: #39ff14;
+  --text-color: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.18);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Rajdhani', sans-serif;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.homeContainer {
+  min-height: 100vh;
+  padding: 2rem;
+  margin-left: 200px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroSection {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.loginTitle {
+  font-size: 3.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  animation: neonGlow 1.5s ease-in-out infinite alternate;
+}
+
+.loginSubtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+@keyframes neonGlow {
+  0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+  100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 30px var(--accent-color-1); }
+}
+
+.featuresContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.featureCard {
+  background: var(--glass-bg);
+  /* backdrop-filter: blur(10px); */
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid var(--glass-border);
+  transform-style: preserve-3d;
+}
+
+.featureCard:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 0 20px var(--accent-color-1);
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--accent-color-1);
+  transition: all 0.3s ease;
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.2) translateZ(20px);
+  color: var(--accent-color-3);
+}
+
+.featureTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.featureDescription {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Plasma-like energy effect */
+@keyframes plasmaEffect {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.plasmaBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--accent-color-1), var(--accent-color-2), var(--accent-color-3));
+  background-size: 400% 400%;
+  animation: plasmaEffect 15s ease infinite;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .featuresContainer {
+    grid-template-columns: 1fr;
+  }
+}
