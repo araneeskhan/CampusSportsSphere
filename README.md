@@ -25,7 +25,7 @@ Ensure that you have the following installed:
 •	Firebase account
 
 1.	Clone the repository:
-2.	git clone araneeskhan/CampusSportsSphere: FYP Part 1 (Web) - "Campus Sports Sphere"
+2.	git clone https://github.com/araneeskhan/CampusSportsSphere
 3.	Install dependencies:
 4.	cd backend 
 5.	npm install
