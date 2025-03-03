@@ -7,3 +7,10 @@ node_modules/
 *.dll
 *.lib
 
+# Ignore secret files
+*.json
+*.pem
+*.p12
+*.key
+*.crt
+serviceAccountKey.json  # If it's a Firebase key
