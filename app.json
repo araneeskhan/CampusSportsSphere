@@ -23,7 +23,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.aneesurrehman.CampusSportsSphere"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,7 +42,21 @@
           "photosPermission": "The app accesses your photos to let you upload images for events.",
           "cameraPermission": "The app accesses your camera to let you take photos for events."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow camera access to scan sports equipment"
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "caa31517-7fa5-40a3-80a1-4ff845f75846"
+      }
+    }
   }
 }

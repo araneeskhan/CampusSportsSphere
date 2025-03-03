@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,14 +6,15 @@ import {
   FlatList,
   Animated,
   Dimensions,
-  ImageBackground,
   TouchableOpacity,
   Image,
   StatusBar,
+  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../../assets/theme/ThemeContext";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors } from "../../../assets/colors/Colors";
 import {
   responsiveHeight,
@@ -22,6 +23,8 @@ import {
 } from "react-native-responsive-dimensions";
 import { LinearGradient } from "expo-linear-gradient";
 import EventManagerHeader from "./components/EventManagerHeader";
+import { collection, query, getDocs, Timestamp } from 'firebase/firestore';
+import { db } from '../../../index';
 
 const { width, height } = Dimensions.get("window");
 const ITEM_WIDTH = width * 0.65;
@@ -31,6 +34,66 @@ const EventManagerHome = () => {
   const navigation = useNavigation();
   const scrollX = useRef(new Animated.Value(0)).current;
   const { isDarkTheme } = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalEvents: 0,
+    upcomingEvents: 0,
+    totalTeams: 0,
+    popularSports: []
+  });
+
+  useEffect(() => {
+    fetchEventStats();
+  }, []);
+
+  const fetchEventStats = async () => {
+    try {
+      // Fetch events
+      const eventsRef = collection(db, "events");
+      const eventsSnapshot = await getDocs(eventsRef);
+      const events = eventsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Fetch teams
+      const teamsRef = collection(db, "teams");
+      const teamsSnapshot = await getDocs(teamsRef);
+      const teams = teamsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Calculate upcoming events
+      const today = new Date();
+      const upcomingEvents = events.filter(event => {
+        const eventDate = new Date(event.eventDate);
+        return eventDate >= today;
+      }).length;
+
+      // Calculate popular sports
+      const sportCounts = events.reduce((acc, event) => {
+        acc[event.category] = (acc[event.category] || 0) + 1;
+        return acc;
+      }, {});
+
+      const popularSports = Object.entries(sportCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 3)
+        .map(([name, count]) => ({ name, count }));
+
+      setStats({
+        totalEvents: events.length,
+        upcomingEvents,
+        totalTeams: teams.length,
+        popularSports
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching event stats:", error);
+      setLoading(false);
+    }
+  };
 
   const menuItems = [
     {
@@ -127,43 +190,96 @@ const EventManagerHome = () => {
     );
   };
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <EventManagerHeader />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={Colors.PRIMARY} />
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <View style={[styles.container, isDarkTheme && styles.darkContainer]}>
+    <ScrollView 
+      style={[styles.container, isDarkTheme && styles.darkContainer]}
+      showsVerticalScrollIndicator={false}
+    >
       <StatusBar barStyle={isDarkTheme ? "light-content" : "dark-content"} />
       <EventManagerHeader />
-      {/* <ImageBackground
-        source={require("../../../assets/images/registeredplayers.png")}
-        style={styles.backgroundImage}
-        imageStyle={{ opacity: 0.3 }}
-        resizeMode="cover"
-      > */}
-        <Text style={[styles.headerTitle, isDarkTheme && styles.darkText]}>
+
+      <Text style={[styles.headerTitle, isDarkTheme && styles.darkText]}>
         Sports Event Arena
-        </Text>
-        <Text
-          style={[styles.headerSubtitle, isDarkTheme && styles.darkSubText]}
-        >
-          Organize and Lead Your Sports Events with Precision!
-        </Text>
-        <View style={styles.content}>
-          <Animated.FlatList
-            data={menuItems}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.title}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={ITEM_WIDTH}
-            
-            decelerationRate="fast"
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              { useNativeDriver: true }
-            )}
-            contentContainerStyle={styles.flatListContent}
-          />
+      </Text>
+      <Text style={[styles.headerSubtitle, isDarkTheme && styles.darkSubText]}>
+        Organize and Lead Your Sports Events with Precision!
+      </Text>
+
+      <View style={styles.content}>
+        <Animated.FlatList
+          data={menuItems}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.title}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={ITEM_WIDTH}
+          decelerationRate="fast"
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: true }
+          )}
+          contentContainerStyle={styles.flatListContent}
+        />
+      </View>
+
+      {/* Stats Section */}
+      <View style={styles.statsOuterContainer}>
+        <Text style={styles.statsTitle}>Event Analytics</Text>
+        <View style={styles.statsCardsContainer}>
+          <View style={[styles.statsCard, { backgroundColor: '#4ECDC4' }]}>
+            <MaterialCommunityIcons name="calendar-multiple" size={30} color="#fff" />
+            <Text style={styles.statNumber}>{stats.totalEvents}</Text>
+            <Text style={styles.statLabel}>Total Events</Text>
+          </View>
+          
+          <View style={[styles.statsCard, { backgroundColor: '#FF6B6B' }]}>
+            <MaterialCommunityIcons name="calendar-clock" size={30} color="#fff" />
+            <Text style={styles.statNumber}>{stats.upcomingEvents}</Text>
+            <Text style={styles.statLabel}>Upcoming</Text>
+          </View>
+          
+          <View style={[styles.statsCard, { backgroundColor: '#4A90E2' }]}>
+            <MaterialCommunityIcons name="account-group" size={30} color="#fff" />
+            <Text style={styles.statNumber}>{stats.totalTeams}</Text>
+            <Text style={styles.statLabel}>Teams Formed</Text>
+          </View>
         </View>
-      {/* </ImageBackground> */}
-    </View>
+
+        {stats.popularSports.length > 0 && (
+          <View style={styles.popularItemsCard}>
+            <View style={styles.popularItemsHeader}>
+              <MaterialCommunityIcons name="trophy-outline" size={24} color={Colors.PRIMARY} />
+              <Text style={styles.popularItemsTitle}>Popular Sports</Text>
+            </View>
+            {stats.popularSports.map((sport, index) => (
+              <View key={index} style={styles.popularItem}>
+                <View style={styles.popularItemLeft}>
+                  <Text style={styles.popularItemRank}>{index + 1}</Text>
+                  <Text style={styles.popularItemName}>{sport.name}</Text>
+                </View>
+                <View style={styles.popularItemRight}>
+                  <Text style={styles.popularItemCount}>{sport.count}</Text>
+                  <Text style={styles.popularItemLabel}>events</Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+
+
+    </ScrollView>
   );
 };
 
@@ -173,7 +289,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.BACKGROUND,
   },
   darkContainer: {
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: Colors.DARK_BACKGROUND,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backgroundImage: {
     flex: 1,
@@ -182,20 +303,19 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: responsiveHeight(20),
-    
+    marginTop: responsiveHeight(2),
   },
   headerTitle: {
     fontSize: responsiveFontSize(3),
     fontWeight: "800",
     color: Colors.PRIMARY,
     marginTop: responsiveHeight(5),
-    marginLeft:responsiveWidth(10),
+    marginLeft: responsiveWidth(10),
     marginBottom: responsiveHeight(1),
   },
   headerSubtitle: {
     fontSize: responsiveFontSize(2.2),
-    marginLeft:responsiveWidth(10),
+    marginLeft: responsiveWidth(10),
     color: Colors.SECONDARY,
     opacity: 0.8,
     marginBottom: responsiveHeight(3),
@@ -261,6 +381,103 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
+  },
+  // New styles for stats section
+  statsOuterContainer: {
+    padding: responsiveWidth(4),
+    marginTop: responsiveHeight(2),
+  },
+  statsTitle: {
+    fontSize: responsiveFontSize(2.4),
+    fontWeight: 'bold',
+    color: Colors.PRIMARY,
+    marginBottom: responsiveHeight(2),
+  },
+  statsCardsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    marginBottom: responsiveHeight(3),
+  },
+  statsCard: {
+    width: '31%',
+    padding: responsiveWidth(3),
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    minHeight: responsiveHeight(12),
+  },
+  statNumber: {
+    fontSize: responsiveFontSize(2.8),
+    fontWeight: 'bold',
+    color: '#fff',
+    marginVertical: responsiveHeight(1),
+  },
+  statLabel: {
+    fontSize: responsiveFontSize(1.4),
+    color: '#fff',
+    textAlign: 'center',
+  },
+  popularItemsCard: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: responsiveWidth(4),
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    marginBottom: responsiveHeight(2),
+  },
+  popularItemsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: responsiveHeight(2),
+  },
+  popularItemsTitle: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    color: Colors.PRIMARY,
+    marginLeft: responsiveWidth(2),
+  },
+  popularItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: responsiveHeight(1),
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  popularItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  popularItemRank: {
+    fontSize: responsiveFontSize(1.8),
+    fontWeight: 'bold',
+    color: Colors.PRIMARY,
+    width: responsiveWidth(8),
+  },
+  popularItemName: {
+    fontSize: responsiveFontSize(1.8),
+    color: Colors.PRIMARY,
+  },
+  popularItemRight: {
+    alignItems: 'flex-end',
+  },
+  popularItemCount: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    color: Colors.PRIMARY,
+  },
+  popularItemLabel: {
+    fontSize: responsiveFontSize(1.4),
+    color: Colors.SECONDARY,
   },
 });
 

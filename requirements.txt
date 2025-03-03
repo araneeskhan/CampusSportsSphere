@@ -1,8 +1,6 @@
 flask
 flask-cors
-sentence-transformers
-torch
-httpx
-beautifulsoup4
-nltk
+scikit-learn
+spacy
 requests
+lxml

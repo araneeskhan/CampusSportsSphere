@@ -20,7 +20,7 @@ const WebScrapping = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://10.113.94.201:5000/scrape");
+        const response = await axios.get("http://10.113.76.183:5000/scrape");
         setData(response.data);
         setLoading(false);
       } catch (err) {

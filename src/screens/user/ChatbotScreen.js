@@ -30,40 +30,38 @@ const ChatbotScreen = () => {
 
   const sendMessage = async () => {
     if (inputText.trim() === '') return;
-  
+
     const userMessage = { text: inputText, user: true };
     setMessages(prevMessages => [...prevMessages, userMessage]);
     setInputText('');
     setIsLoading(true);
     Keyboard.dismiss();
-  
+
     try {
-      const response = await fetch('https://campus-sports-sphere-fawuo1l7p-anees-ur-rehmans-projects.vercel.app/ask', {
+      const response = await fetch('http://10.113.76.183:5000/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ question: inputText }),
       });
-  
+
       if (!response.ok) {
-        console.error('Response failed:', response);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const data = await response.json();
       const botMessage = { text: data.answer, user: false };
       setMessages(prevMessages => [...prevMessages, botMessage]);
     } catch (error) {
-      console.error('Error in request:', error);
+      console.error('Error:', error);
       const errorMessage = { text: 'Sorry, there was an error. Please try again.', user: false };
       setMessages(prevMessages => [...prevMessages, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
-  
-  
+
   const renderMessage = ({ item }) => (
     <View style={[styles.messageBubble, item.user ? styles.userMessage : styles.botMessage]}>
       <Text style={[styles.messageText, item.user ? styles.userMessageText : styles.botMessageText]}>{item.text}</Text>
