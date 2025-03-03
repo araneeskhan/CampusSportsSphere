@@ -8,6 +8,9 @@ node_modules/
 *.lib
 
 # Ignore secret files
+# Ignore sensitive files
+index.js
+firebase.js
 *.json
 *.pem
 *.p12
