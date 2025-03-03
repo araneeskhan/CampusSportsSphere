@@ -1,1 +1,10 @@
 node_modules/
+
+# Ignore virtual environments
+venv/
+.vscode/
+node_modules/
+
+# Ignore large files
+*.dll
+*.lib
