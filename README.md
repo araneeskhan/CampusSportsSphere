@@ -42,7 +42,7 @@ Welcome to **Campus Sports Sphere - Part 2**! This project expands on the founda
 - **Authentication**: Firebase Authentication 🔑
 - **AI & ML**: TensorFlow.js (for team formations & recommendations) 🧠
 - **Weather API**: OpenWeatherMap ☁
-- **Chatbot**: Custom AI Model using Dialogflow or GPT API 💡
+- **Chatbot**: Trained a Custom AI Model 💡
 
 ## 📚 **Installation**
 
